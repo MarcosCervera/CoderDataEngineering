@@ -66,4 +66,4 @@ task_4 = PythonOperator(
 )
 
 # Definicion orden de tareas
-task_1 >> task_2 >> task_31 >> task_32    
+task_1 >> task_2 >> task_31 >> task_32 >> task_4  
