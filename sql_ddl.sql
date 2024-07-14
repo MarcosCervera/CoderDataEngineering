@@ -1,7 +1,45 @@
+-- Crear la tabla de calendario
 
--- Crea tablas para prod --
+DROP TABLE IF EXISTS marcoscervera_coderhouse.calendario;
+CREATE TABLE calendario (
+    fecha DATE PRIMARY KEY,
+    anio INT,
+    mes INT,
+    dia INT,
+    nombre_mes VARCHAR(20),
+    nombre_dia VARCHAR(20),
+    trimestre INT,
+    es_dia_habil BOOLEAN,
+    ultimo_dia_mes DATE
+);
+
+
+-- Crear tabla stage (etl api bcra)
+
+DROP TABLE IF EXISTS marcoscervera_coderhouse.stage_bcra_hash;
+CREATE TABLE stage_bcra_hash(
+	fecha Date,
+	base VARCHAR(50),
+	cajas_ahorro VARCHAR(50),
+	cer VARCHAR(50),
+	circulacion_monetaria VARCHAR(50),
+	cuentas_corrientes VARCHAR(50),
+	depositos VARCHAR(50),
+	inflacion_interanual_oficial VARCHAR(50),
+	inflacion_mensual_oficial VARCHAR(50),
+	plazo_fijo VARCHAR(50),
+	reservas VARCHAR(50),
+	usd VARCHAR(50),
+	usd_of VARCHAR(50),
+	usd_of_minorista VARCHAR(50),
+	uva VARCHAR(50) ,
+	depositos_hash VARCHAR(50)
+);
+
+
+-- Crea tabla prod (de stage bcra)
+
 DROP TABLE IF EXISTS marcoscervera_coderhouse.bcra;
-
 CREATE TABLE bcra(
 	fecha Date PRIMARY KEY,
 	base INT,
@@ -21,7 +59,7 @@ CREATE TABLE bcra(
 );
 
 
--- Procedimiento para cargar tabla--
+-- Creación de procedimiento para información de tabla stage a producción 
 	
 CREATE OR REPLACE PROCEDURE MoveDataToProd () 
 LANGUAGE plpgsql
@@ -65,7 +103,3 @@ BEGIN
 END;
 $$;
 
-CALL MoveDataToProd();
-
-select *
-from bcra
