@@ -19,7 +19,7 @@ from email.mime.text import MIMEText
 import smtplib
 
 
-load_dotenv()  # take environment variables from .env.
+load_dotenv()  
 
 dag_path = os.getcwd() 
 
@@ -127,24 +127,21 @@ def cargar_data():
         password=redshift_conn["pwd"],
         port='5439')
     
-    # Definir columnas
     columns= ['fecha',	'base',	'cajas_ahorro',	'cer',	'circulacion_monetaria',	
               'cuentas_corrientes',	'depositos',	'inflacion_interanual_oficial',	
               'inflacion_mensual_oficial',	'plazo_fijo',	'reservas',	'usd',	'usd_of',	
               'usd_of_minorista',	'uva',	'depositos_hash',	'cuentas_corrientes_hash']
     cur = conn.cursor()
-    # Define the table name
+    
     table_name = 'stage_bcra_hash'
-    # Define the columns you want to insert data into
     columns = columns
-    # Generate 
+    
     values = [tuple(x) for x in df.to_numpy()]
     insert_sql = f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES %s"
-    # Execute the INSERT statement using execute_values
+    
     cur.execute("BEGIN")
     execute_values(cur, insert_sql, values)
     cur.execute("COMMIT")    
-    #df.to_sql('mining_data', engine, index=False, if_exists='append')  
 
 
 ### Envia Email ###
