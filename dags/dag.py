@@ -59,6 +59,7 @@ task_32 = PythonOperator(
     dag=BC_dag,
 )
 
+# 4 Envio de email
 task_4 = PythonOperator(
     task_id='send_mail',
     python_callable=enviar_email,
